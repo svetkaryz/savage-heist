@@ -16,7 +16,7 @@
   const board = $('board');
   const bestScoreKey='savageHeistBestScore';
   let savedBest=0;try{savedBest=Number(localStorage.getItem(bestScoreKey))||0}catch{}
-  const state = {player:{...start}, guard:{...patrol[0]}, patrolIndex:0, turn:1, heat:0, hasLoot:false, decoys:2, selectedTool:false, decoy:null, decoyTurns:0, done:false, log:[],bestScore:savedBest};
+  const state = {player:{...start}, guard:{...patrol[0]}, patrolIndex:0, returningToPatrol:false, turn:1, heat:0, hasLoot:false, decoys:2, selectedTool:false, decoy:null, decoyTurns:0, done:false, log:[],bestScore:savedBest};
   const posKey = (x,y) => `${x},${y}`;
   const isWall = (x,y) => x<0 || y<0 || x>=W || y>=H || map[y][x] === '#';
   const same = (a,b) => a.x===b.x && a.y===b.y;
@@ -37,7 +37,8 @@
   }
   function moveGuard(){
     if(state.decoyTurns>0&&state.decoy){const step=pathStep(state.guard,state.decoy);if(step)state.guard=step;state.decoyTurns--;if(state.decoyTurns===0)state.decoy=null;return}
-    if(state.heat>=25){const step=pathStep(state.guard,state.player);if(step)state.guard=step;return}
+    if(state.heat>=25){state.returningToPatrol=true;const step=pathStep(state.guard,state.player);if(step)state.guard=step;return}
+    if(state.returningToPatrol){const routePoint=patrol[state.patrolIndex];if(same(state.guard,routePoint)){state.returningToPatrol=false}else{const step=pathStep(state.guard,routePoint);if(step)state.guard=step;if(same(state.guard,routePoint))state.returningToPatrol=false;return}}
     state.patrolIndex=(state.patrolIndex+1)%patrol.length;state.guard={...patrol[state.patrolIndex]};
   }
   function finish(outcome){state.done=true;state.selectedTool=false;$('decoy-button').classList.remove('selected');$('overlay').hidden=false;const won=outcome==='won';$('overlay-stamp').textContent=won?'JOB COMPLETE':'CREW LOST';$('overlay-title').textContent=won?(state.heat<25?'Clean getaway.':'You got out. Barely.'):'The job went bad.';$('overlay-copy').textContent=won?'The ledger is yours. The city hasn’t heard a thing.':'The patrol closed in before you could make the exit.';if(won){const score=Math.max(100,1000-state.heat*5-state.turn*7),isNew=score>state.bestScore;state.bestScore=Math.max(score,state.bestScore);try{localStorage.setItem(bestScoreKey,String(state.bestScore))}catch{}$('best-score').textContent=String(state.bestScore);$('overlay-score').textContent=`RUN SCORE ${score}  /  BEST ${state.bestScore}${isNew?'  /  NEW BEST':''}`}else $('overlay-score').textContent='ROOK DIDN’T MAKE IT BACK';$('restart-overlay').focus()}
@@ -55,7 +56,7 @@
     render();
   }
   function moveTo(x,y){if(state.done||isWall(x,y)||manhattan(state.player,{x,y})!==1)return;if(state.selectedTool)return;state.player={x,y};playerTurn('move')}
-  function useDecoy(x,y){if(state.done||!state.selectedTool)return;const reachable=reachableWithin(state.player,4);if(isWall(x,y)||!reachable.has(posKey(x,y))||same(state.player,{x,y})||same(state.guard,{x,y})){addLog('Choose open floor within four moves, away from the guard.');return}state.decoys--;state.decoy={x,y};state.decoyTurns=3;state.selectedTool=false;$('decoy-button').classList.remove('selected');$('tool-hint').textContent=state.decoys?`Decoys left: ${state.decoys}. Choose reachable open floor away from the guard.`:'No decoys left.';addLog('Decoy thrown. Patrol is checking the noise.');playerTurn('decoy')}
+  function useDecoy(x,y){if(state.done||!state.selectedTool)return;const reachable=reachableWithin(state.player,4);if(isWall(x,y)||!reachable.has(posKey(x,y))||same(state.player,{x,y})||same(state.guard,{x,y})){addLog('Choose open floor within four moves, away from the guard.');return}state.decoys--;state.decoy={x,y};state.decoyTurns=3;state.returningToPatrol=true;state.selectedTool=false;$('decoy-button').classList.remove('selected');$('tool-hint').textContent=state.decoys?`Decoys left: ${state.decoys}. Choose reachable open floor away from the guard.`:'No decoys left.';addLog('Decoy thrown. Patrol is checking the noise.');playerTurn('decoy')}
   function render(){
     board.innerHTML='';const sight=sightTilesFrom(state.guard),reachable=state.selectedTool?reachableWithin(state.player,4):new Map();
     for(let y=0;y<H;y++)for(let x=0;x<W;x++){
@@ -74,11 +75,11 @@
     $('status-text').textContent=state.hasLoot?'Ledger secured. Double back to the green extraction tile.':state.selectedTool?'Pick a lit floor tile. The guard moves after you throw.':'Stay out of the patrol’s sight. Take the ledger, then double back.';
     $('status-icon').textContent=state.hasLoot?'↩':'!';
   }
-  function restart(){state.player={...start};state.guard={...patrol[0]};state.patrolIndex=0;state.turn=1;state.heat=0;state.hasLoot=false;state.decoys=2;state.selectedTool=false;state.decoy=null;state.decoyTurns=0;state.done=false;state.log=[];$('objective-check-1').textContent='○';$('objective-check-2').textContent='○';$('objective-check-1').classList.remove('done');$('objective-check-2').classList.remove('done');$('overlay').hidden=true;$('noise-state').textContent='LOW';$('tool-hint').textContent='Select, then click a floor tile within 4 steps.';updateHeat(0);addLog('Rook is inside. Patrol is walking its loop.');render()}
+  function restart(){state.player={...start};state.guard={...patrol[0]};state.patrolIndex=0;state.returningToPatrol=false;state.turn=1;state.heat=0;state.hasLoot=false;state.decoys=2;state.selectedTool=false;state.decoy=null;state.decoyTurns=0;state.done=false;state.log=[];$('objective-check-1').textContent='○';$('objective-check-2').textContent='○';$('objective-check-1').classList.remove('done');$('objective-check-2').classList.remove('done');$('overlay').hidden=true;$('noise-state').textContent='LOW';$('tool-hint').textContent='Select, then choose a reachable floor tile within 4 moves.';updateHeat(0);addLog('Rook is inside. Patrol is walking its loop.');render()}
   const intro=$('intro');let introClosed=false;function closeIntro(){if(introClosed)return;introClosed=true;document.querySelectorAll('header,main,footer').forEach(el=>el.inert=false);intro.classList.add('closing');window.setTimeout(()=>intro.remove(),280)}
   if(intro&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){document.querySelectorAll('header,main,footer').forEach(el=>el.inert=true);$('start-heist').addEventListener('click',closeIntro);$('start-heist').focus()}
   else if(intro)closeIntro();
-  document.addEventListener('keydown',e=>{if(!introClosed&&e.key!=='Tab'){closeIntro();return}if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key))e.preventDefault();if(e.key==='Escape'){if(state.selectedTool){state.selectedTool=false;$('decoy-button').classList.remove('selected');render()}return}const dirs={w:[0,-1],ArrowUp:[0,-1],s:[0,1],ArrowDown:[0,1],a:[-1,0],ArrowLeft:[-1,0],d:[1,0],ArrowRight:[1,0]};const dir=dirs[e.key];if(dir&&!state.selectedTool){moveTo(state.player.x+dir[0],state.player.y+dir[1])}});
+  document.addEventListener('keydown',e=>{if(!introClosed){if(e.key==='Enter'||e.key===' '){e.preventDefault();closeIntro()}return}if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key))e.preventDefault();if(e.key==='Escape'){if(state.selectedTool){state.selectedTool=false;$('decoy-button').classList.remove('selected');render()}return}const dirs={w:[0,-1],ArrowUp:[0,-1],s:[0,1],ArrowDown:[0,1],a:[-1,0],ArrowLeft:[-1,0],d:[1,0],ArrowRight:[1,0]};const dir=dirs[e.key];if(dir&&!state.selectedTool){moveTo(state.player.x+dir[0],state.player.y+dir[1])}});
   $('decoy-button').addEventListener('click',()=>{if(state.done||state.decoys<=0)return;state.selectedTool=!state.selectedTool;$('decoy-button').classList.toggle('selected',state.selectedTool);$('tool-hint').textContent=state.selectedTool?'Choose a lit floor tile within four steps. Esc cancels.':'Select, then click a floor tile within 4 steps.';render()});
   $('restart-top').addEventListener('click',restart);$('restart-overlay').addEventListener('click',restart);
   addLog('Rook is inside. Patrol is walking its loop.');updateHeat(0);render();

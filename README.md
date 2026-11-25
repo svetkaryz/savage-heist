@@ -4,7 +4,7 @@ A one-mission, turn-based stealth puzzle that runs as a static website. No build
 
 ## Play locally
 
-Open `index.html` in a modern browser. Select **Start Heist** or press any key to begin. The opening explains the goal and controls. Use WASD or the arrow keys to move one tile, or tap an adjacent floor tile. Red tiles show the guard's current sight. At 25% heat, the guard hunts you; at 100%, the run ends. A decoy pulls the guard to its spot for three turns. Select **Noise decoy**, then choose a floor tile you can reach in four moves, away from the guard. Press Escape to cancel the selected tool.
+Open `index.html` in a modern browser. Select **Start Heist** or press Enter/Space to begin. The opening explains the goal and controls. Use WASD or the arrow keys to move one tile, or tap an adjacent floor tile. Red tiles show the guard's current sight. At 25% heat, the guard hunts you; at 100%, the run ends. A decoy pulls the guard to its spot for three turns, then it walks back to patrol. Select **Noise decoy**, then choose a floor tile you can reach in four moves, away from the guard. Press Escape to cancel the selected tool.
 
 Reach the amber ledger, then return to the green EXIT tile. The guard moves after every action. A decoy pulls him to its spot for three turns; place it on open floor, away from him. Score starts at 1,000; heat and turns lower it. Your best score is saved in this browser.
 
