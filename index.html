@@ -10,6 +10,16 @@
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
+  <div id="intro" class="intro-screen" role="dialog" aria-label="Game opening" tabindex="0">
+    <div class="intro-scan" aria-hidden="true"></div>
+    <div class="intro-content">
+      <div class="intro-eyebrow"><span class="live-dot"></span> STATIC CITY // JOB 01</div>
+      <div class="intro-mark">SH</div>
+      <p class="intro-line">ONE EXIT.<br>ONE LEDGER.<br><span>ONE GUARD.</span></p>
+      <div class="intro-bottom"><span>ROOK IS IN. MOVE NOW.</span><span>TAP OR PRESS ANY KEY</span></div>
+      <div class="intro-progress"><i></i></div>
+    </div>
+  </div>
   <header class="topbar">
     <a class="brand" href="#top" aria-label="Savage Heist home"><span class="brand-mark">SH</span><span>SAVAGE<span class="muted">/</span>HEIST</span></a>
     <div class="top-status"><span class="live-dot"></span> JOB IN PROGRESS <span class="divider">/</span> NORTH DOCKS</div>
@@ -22,11 +32,20 @@
       <h1>COLD<br><span>STORAGE</span></h1>
       <p class="lede">A syndicate keeps its cash ledger in a dockside freezer. Get in, take the book, and leave before the night shift clocks on.</p>
 
+      <div class="howto-card">
+        <div class="section-label">HOW TO PLAY <span>3 STEPS</span></div>
+        <div class="howto-step"><b>1</b><span><strong>Move one space.</strong> Click or tap a tile next to Rook.</span></div>
+        <div class="howto-step"><b>2</b><span><strong>Watch the red tiles.</strong> They show the guard’s sight. After each move, the guard moves and looks again.</span></div>
+        <div class="howto-step"><b>3</b><span><strong>Grab the ledger, then escape.</strong> Reach the amber tile and return to the green EXIT.</span></div>
+        <p class="plain-tip">If the guard sees you, HEAT goes up. At 100%, the job is over. Throw a decoy to draw the guard away.</p>
+      </div>
+
       <div class="mission-card">
         <div class="card-head"><span>THE TAKE</span><span class="value">$18,400</span></div>
         <p>Ledger is marked in <b>amber</b>. Reach it, then make it back to the extraction point.</p>
         <div class="objective-row"><span class="objective-icon">01</span><span>Lift the ledger</span><span id="objective-check-1" class="objective-check">○</span></div>
         <div class="objective-row"><span class="objective-icon">02</span><span>Reach extraction</span><span id="objective-check-2" class="objective-check">○</span></div>
+        <div class="best-row"><span>BEST RUN</span><b id="best-score">—</b></div>
       </div>
 
       <div class="crew-card">
@@ -40,21 +59,21 @@
         <button id="decoy-button" class="tool-button" type="button" aria-pressed="false">
           <span class="tool-glyph">D</span><span class="tool-copy"><b>Noise decoy</b><small>Throw to pull the guard off route</small></span><span id="decoy-count" class="tool-count">2×</span>
         </button>
-        <p id="tool-hint" class="tool-hint">Select, then click a floor tile within 4 steps.</p>
+        <p id="tool-hint" class="tool-hint">Select, then choose an open tile you can walk to in 4 moves.</p>
       </div>
 
       <div class="controls">
         <div class="section-label">FIELD CONTROLS</div>
         <div><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd><span>Move one tile</span></div>
-        <div><kbd>CLICK</kbd><span>Move to adjacent tile</span></div>
-        <div><kbd>ESC</kbd><span>Cancel tool / restart prompt</span></div>
+        <div><kbd>CLICK</kbd><span>Move to adjacent tile <span class="mobile-help">(tap on phone)</span></span></div>
+        <div><kbd>ESC</kbd><span>Cancel selected tool</span></div>
       </div>
     </section>
 
     <section class="board-column" aria-label="Heist game">
       <div class="board-topline"><div><span class="board-kicker">NORTH DOCKS</span><h2>Freezer 04 <span>— 02:17 AM</span></h2></div><div class="run-stats"><span>TURN <b id="turn-count">01</b></span><span>NOISE <b id="noise-state">LOW</b></span></div></div>
       <div class="board-frame">
-        <div class="board-meta"><span><i class="legend-dot you"></i> YOU</span><span><i class="legend-dot guard"></i> PATROL</span><span><i class="legend-dot loot"></i> LEDGER</span><span class="map-coord">GRID 10 × 8</span></div>
+        <div class="board-meta"><span><i class="legend-dot you"></i> YOU</span><span><i class="legend-dot guard"></i> PATROL</span><span><i class="legend-dot loot"></i> LEDGER</span><span class="sight-legend"><i class="legend-dot sight"></i> GUARD SIGHT</span><span class="map-coord">GRID 10 × 8</span></div>
         <div id="board" class="board" role="grid" aria-label="Heist floor plan"></div>
         <div id="overlay" class="overlay" hidden>
           <div class="overlay-card"><div id="overlay-stamp" class="overlay-stamp">JOB COMPLETE</div><h3 id="overlay-title">Clean getaway.</h3><p id="overlay-copy">The ledger is yours. The city hasn't heard a thing.</p><div id="overlay-score" class="overlay-score"></div><button id="restart-overlay" class="primary-button" type="button">RUN IT BACK</button></div>
