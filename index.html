@@ -35,9 +35,9 @@
       <div class="howto-card">
         <div class="section-label">HOW TO PLAY <span>3 STEPS</span></div>
         <div class="howto-step"><b>1</b><span><strong>Move one space.</strong> Click or tap a tile next to Rook.</span></div>
-        <div class="howto-step"><b>2</b><span><strong>Watch the red tiles.</strong> They show the guard’s sight. After each move, the guard moves and looks again.</span></div>
+        <div class="howto-step"><b>2</b><span><strong>Watch the red tiles.</strong> They show the guard’s sight. At 25% HEAT, he hunts you. At 100%, the job ends.</span></div>
         <div class="howto-step"><b>3</b><span><strong>Grab the ledger, then escape.</strong> Reach the amber tile and return to the green EXIT.</span></div>
-        <p class="plain-tip">If the guard sees you, HEAT goes up. At 100%, the job is over. Throw a decoy to draw the guard away.</p>
+        <p class="plain-tip">After each action, the guard moves and looks again. A decoy pulls him to its spot for 3 turns.</p>
       </div>
 
       <div class="mission-card">
@@ -46,6 +46,7 @@
         <div class="objective-row"><span class="objective-icon">01</span><span>Lift the ledger</span><span id="objective-check-1" class="objective-check">○</span></div>
         <div class="objective-row"><span class="objective-icon">02</span><span>Reach extraction</span><span id="objective-check-2" class="objective-check">○</span></div>
         <div class="best-row"><span>BEST RUN</span><b id="best-score">—</b></div>
+        <p class="score-tip">Score starts at 1,000. Heat and turns lower it. Beat your best run.</p>
       </div>
 
       <div class="crew-card">
@@ -57,9 +58,9 @@
       <div class="toolkit">
         <div class="section-label">POCKET TOOLS <span>1 / 2</span></div>
         <button id="decoy-button" class="tool-button" type="button" aria-pressed="false">
-          <span class="tool-glyph">D</span><span class="tool-copy"><b>Noise decoy</b><small>Throw to pull the guard off route</small></span><span id="decoy-count" class="tool-count">2×</span>
+          <span class="tool-glyph">D</span><span class="tool-copy"><b>Noise decoy</b><small>Pulls the guard away for 3 turns</small></span><span id="decoy-count" class="tool-count">2×</span>
         </button>
-        <p id="tool-hint" class="tool-hint">Select, then choose an open tile you can walk to in 4 moves.</p>
+        <p id="tool-hint" class="tool-hint">Select, then choose a reachable floor tile within 4 moves.</p>
       </div>
 
       <div class="controls">
