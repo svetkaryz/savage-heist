@@ -10,13 +10,16 @@
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
-  <div id="intro" class="intro-screen" role="dialog" aria-label="Game opening" tabindex="0">
+  <div id="intro" class="intro-screen" role="dialog" aria-label="Game opening" aria-modal="true">
     <div class="intro-scan" aria-hidden="true"></div>
     <div class="intro-content">
-      <div class="intro-eyebrow"><span class="live-dot"></span> STATIC CITY // JOB 01</div>
+      <div class="intro-eyebrow"><span class="live-dot"></span> JOB 01 // NORTH DOCKS</div>
       <div class="intro-mark">SH</div>
-      <p class="intro-line">ONE EXIT.<br>ONE LEDGER.<br><span>ONE GUARD.</span></p>
-      <div class="intro-bottom"><span>ROOK IS IN. MOVE NOW.</span><span>TAP OR PRESS ANY KEY</span></div>
+      <p class="intro-line">STEAL THE LEDGER.<br><span>GET OUT.</span></p>
+      <p class="intro-explain">Reach the amber ledger. Avoid the guard’s red sight. Return to the green EXIT.</p>
+      <div class="intro-controls"><span><b>WASD / ARROWS</b> move one tile</span><span><b>TAP</b> a neighboring tile to move</span></div>
+      <button id="start-heist" class="start-heist-button" type="button">START HEIST <span aria-hidden="true">↗</span></button>
+      <div class="intro-bottom"><span>THE GUARD MOVES AFTER YOUR ACTION.</span><span>PRESS ANY KEY TO START</span></div>
       <div class="intro-progress"><i></i></div>
     </div>
   </div>
